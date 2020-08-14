@@ -284,12 +284,12 @@ pages. You can click on each one to copy them or make your own content. Any file
 has an '.md' extension will turn into a page, provided you also link to it in another page with
 `url_for()`.
 
+[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/)
+
     pages/
       content.md
       index.md
       team.md
-
-[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/)
 
 At the top of each page, you'll notice its "meta" section, which is YAML and looks something like
 this:
@@ -360,12 +360,12 @@ Finally, any static assets like images, css, or js that we link to need to go in
 Frozen-Flask will automatically grab them if they are used. For this example, I'm only using a few,
 but you might many more:
 
+[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/)
+
     static/
       images/
         logo.png
       base.css
-
-[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/)
 
 ### Develop & Freeze
 
@@ -439,7 +439,7 @@ with pipenv.
 
 ![Screenshot of the "Basic build settings" section of the Netlify New Site options](https://flask-static-tutorial.netlify.app/static/build-settings.webp)
 
-Now press deploy. You can watch the progress by clicking on the deploy item, it will give you a full output
+Now press "Deploy Site". You can watch the progress by clicking on the deploy item, it will give you a full output
 and status. If you get a big old "Deploy Failed", go into the deploy and scroll down in the page
 to see why.
 
