@@ -1,6 +1,6 @@
 Embracing JAMStack with Python: Generating a Static Website with Flask and Deploying to Netlify
 
-### Big Idea
+### The Big Idea
 
 JAMStack completely changes how an entire organization can iterate on a web app. It decouples your
 frontend and backend workflow, so you can focus on speed to your end-user, worry less about how
@@ -31,10 +31,17 @@ The ones that do best keep going, ignore the haters, and reach out to others for
 - [Netlify: What it is and how to deploy your site](#netlify)
 - [Final Thoughts: Some tips and where to go from here.](#final-thoughts)
 
+### Important Links:
+
+- [Github Repository for this Tutorial](https://github.com/DeadWisdom/flask-static-tutorial)
+- [Project Example: Rare Pup Detective Agency](https://flask-static-tutorial.netlify.app/)
+- [Netlify](https://netlify.com)
+- [Flask](https://flask.palletsprojects.com/)
+
 # JAMStack
 
 JAMStack is a terrible name. It sounds like a local event for jarring preserves. But it's a great
-concept: Focus on a separation of Javascript, API, and Markup. It will completely change how
+concept: Focus on a separation of Javascript, API, and Markup.
 
 The frontend and the backend decouple, with the Markup becoming a _static_ platform which the
 JavaScript builds on. Data is delivered from the API to the JavaScript. You can still do some
@@ -61,26 +68,26 @@ options like Firebase or AWS Amplify. Modularity, composition, wow! Who knew it 
 ### When to not use JAMStack
 
 JAMStack only has one place where classic markup generation is better, and that's when you need
-to generate a lot of _content_, i.e. Markup, depending on the user viewing it or based on dynamic
-data.
+to generate a lot of _content_, i.e. Markup, depending on the user viewing or based on dynamic data.
 
 With something like a stock-ticker, that's fine because it comes from an API. But for
-something like a CMS, where the content often changes based on changes from a database, then classic
-Jinja rendering is still where it's at.
+something like a CMS, where the content often changes via a database, then classic Jinja rendering
+is still where it's at.
 
 Still a lot of the promises of database-driven CMS's have yet to materialize, and people are
 increasingly finding it easier to simply change the content in the source code and redeploy,
 especially when it's done automatically and quickly.
 
-Further it's simple to put content generation behind an API endpoint, maybe even a serverless one.
+Further it's simple to put some content generation behind an API endpoint, if you don't need a lot
+done that way.
 
 # Generating Static Websites with Flask
 
 This technique allows you to generate a static website in much the same way you'd make a classic
-Flask app. And this example parallels examples shown by generators like 11ty and Jekyll, but in my
-opinion is better because it allows us to use Python, Flask and all the great tools that come with.
-Now, we could easily use Django, FastAPI, Starlette, or any other framework for this, but Flask
-has two extensions that make the process really easy: Frozen-Flask and Flask-Pages.
+Flask app. And this example parallels examples shown by generators like 11ty, Gatsby, and Jekyll,
+but in my opinion is better because it allows us to use Python, Flask and all the great tools that
+come with. Now, we could easily use Django, FastAPI, Starlette, or any other framework for this,
+but Flask has two extensions that make the process really easy: Frozen-Flask and Flask-FlatPages.
 
 We're going to break our endeavour into these goals:
 
@@ -273,13 +280,12 @@ has an '.md' extension will turn into a page, provided you also link to it with 
       content.md
       index.md
       team.md
-      work.md
 
 At the top of each page, you'll notice it's "meta" section, which is yaml and looks something like
 this:
 
 ```yaml
-Title: Pet Shop Detective Agency
+Title: Rare Pup Detective Agency
 Description: We sniff out the clues.
 ```
 
@@ -304,7 +310,6 @@ Now let's create our Jinja template, that serves as the wrapper for our pages `t
       <nav>
         <a href="/" {% if page.path == "index" %}active{% endif %}>Home</a>
         <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
-        <a href="{{ url_for('page', path='work') }}" {% if page.path == "work" %}active{% endif %}>Work</a>
         <a href="{{ url_for('page', path='contact') }}" {% if page.path == "contact" %}active{% endif %}>Contact</a>
       </nav>
     </header>
@@ -370,7 +375,6 @@ directory:
       content.html
       index.html
       team.html
-      work.html
 
 ## Add Some JavaScript and Connect to an API
 
@@ -388,7 +392,7 @@ We'll add the script linked below:
 
 And link it in `templates/page.html` with a simple:
 
-    <script src="/static/js/dogs.js"></script>
+    <script type="module" src="/static/js/dogs.js"></script>
 
 When we freeze, you'll see, it gets added to `build/`. If we need to compile our JavaScript with
 rollup, parcel, or webpack it's simple enough to run that before we do freeze.
@@ -401,8 +405,8 @@ Netlify isn't really doing anything special here. There's nothing that necessita
 
 But using Netlify is a dream. They have really figured out the process. Basically, it hooks into your repo, listens for updates, then runs a build command, puts it on a CDN, and routes to it.
 
-Every build gets saved to a _unique url_. This is key. It means we can create feature branches without
-a thought. Since they talk to the same APIs we can only branch on the frontend, but that is usually
+Every build gets served by a _unique url_. This is key. It means we can create feature branches without
+a thought. Since they talk to the same APIs, we can only easily branch on the frontend, but that is usually
 a fine trade-off.
 
 Oh and by the way, it's free for small projects.
@@ -436,14 +440,15 @@ Now every time you commit, it will go live. You can also make it only publish a 
 setup triggers, etc. There's a million different options, so play around.
 
 One important thing to know about Netlify is it has a decent redirect feature, allowing you to remap
-a request like /api/dogs to wherever you want, including an API server.
+a request like /api/\* to wherever you want, including an API endpoint.
 
-And there you have it, dead simple.
+And there you have it, ready to browser.
 
 # Final Thoughts
 
 I hope I've shown how JAMStack can be an amazing way to develop, and how we don't need to leave all
-the glorious wealth we have from Python to get there.
+the glorious wealth we have from Python to get there. From here you can look into Zappa for
+serverless endpoints,
 
 ## Some Tips
 
@@ -463,7 +468,7 @@ private and public endpoints. That helps you a lot when you get to caching.
 ## Communication
 
 If you spot any problems, have any questions, or want to request further tutorials create an issue
-in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@htmlbrantley](https://twitter.com/htmlbrantley)
+in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
 
 Also I am available as a consultant, primarily in helping organizations streamline their innovation
 and development cycles, especially where product, design, and development teams are struggling to
