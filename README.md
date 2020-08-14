@@ -285,9 +285,11 @@ has an '.md' extension will turn into a page, provided you also link to it in an
 `url_for()`.
 
     pages/
-      [content.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/contact.md)
-      [index.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/index.md)
-      [team.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/team.md)
+      content.md
+      index.md
+      team.md
+
+[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/)
 
 At the top of each page, you'll notice its "meta" section, which is YAML and looks something like
 this:
@@ -360,8 +362,10 @@ but you might many more:
 
     static/
       images/
-        [logo.png](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/images/logo.png)
-      [base.css](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/base.css)
+        logo.png
+      base.css
+
+[browse files](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/)
 
 ### Develop & Freeze
 
@@ -393,7 +397,7 @@ calling out to the wonderful service [Dog CEO, Dog Api](https://dog.ceo/dog-api/
 
 We'll add the script linked below:
 
-    [static/js/dogs.js](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/js/dogs.js)
+[static/js/dogs.js](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/js/dogs.js)
 
 It defines a custom element "dog-picture" which we've already spread through the site. If the user
 didn't have JavaScript, the browser just ignores all of the `<dog-picture>` elements. Once this
@@ -482,7 +486,7 @@ A great way to organize your apps is authenticated vs unauthenticated. Think of 
 anonymous, and then JavaScript adds functionality when they login. And think of your APIs as
 private and public endpoints. That helps you a lot when you get to caching.
 
-## Communicate with Me!
+## Communicate With Me!
 
 If you spot any problems, have any questions, or want to request further tutorials create an issue
 in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
