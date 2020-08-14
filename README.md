@@ -9,6 +9,20 @@ it's served, keep separate iteration cycles, and best of all, enable easy featur
 I'll show, step by step, how you can use the powerful, sophisticated tools of Flask and Python without
 bothering with specialized static-site generators.
 
+### Contents:
+
+- [JAMStack: What it is and why it's awesome](#jamstack)
+- [Generating Static Websites with Flask: A step-by-step tutorial](#generating-static-websites-with-flask)
+- [Netlify: What it is and how to deploy your site](#netlify)
+- [Final Thoughts: Some tips and where to go from here](#final-thoughts)
+
+### Important Links:
+
+- [Github Repository for this Tutorial](https://github.com/DeadWisdom/flask-static-tutorial)
+- [Project Example: Rare Pup Detective Agency](https://flask-static-tutorial.netlify.app/)
+- [Netlify](https://netlify.com)
+- [Flask](https://flask.palletsprojects.com/)
+
 ### Before We Begin
 
 - Black lives matter.
@@ -23,20 +37,6 @@ we must remember that our actions _matter_.
 And finally, if you struggle with this tutorial or the concepts herein, know that we all struggle.
 Tech is a deep, long journey, we all (at every level) get frustrated and doubt ourselves constantly.
 The best way is to keep going, ignore the haters, and reach out to others for help.
-
-### Contents:
-
-- [JAMStack: What it is and why it's awesome](#jamstack)
-- [Generating Static Websites with Flask: A step-by-step tutorial](#generating-static-websites-with-flask)
-- [Netlify: What it is and how to deploy your site](#netlify)
-- [Final Thoughts: Some tips and where to go from here](#final-thoughts)
-
-### Important Links:
-
-- [Github Repository for this Tutorial](https://github.com/DeadWisdom/flask-static-tutorial)
-- [Project Example: Rare Pup Detective Agency](https://flask-static-tutorial.netlify.app/)
-- [Netlify](https://netlify.com)
-- [Flask](https://flask.palletsprojects.com/)
 
 # JAMStack
 
