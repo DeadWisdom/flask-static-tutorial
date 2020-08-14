@@ -28,8 +28,8 @@ The ones that do best keep going, ignore the haters, and reach out to others for
 
 - [JAMStack: What it is and why it's awesome.](#jamstack)
 - [Generating Static Websites with Flask: A step-by-step tutorial](#generating-static-websites-with-flask)
-- Netlify: What it is and how to deploy your site
-- Final Thoughts: Some tips and where to go from here.
+- [Netlify: What it is and how to deploy your site](#netlify)
+- [Final Thoughts: Some tips and where to go from here.](#final-thoughts)
 
 # JAMStack
 
@@ -85,10 +85,10 @@ has two extensions that make the process really easy: Frozen-Flask and Flask-Pag
 We're going to break our endeavour into these goals:
 
 1. [Setup / Install Our Dependencies and Setup Github](#goal-1-setup--install-our-dependencies-and-setup-github)
-2. Create Our Flask App
-3. Freeze It
-4. Add Pages / Content with Markdown
-5. Add Some JavaScript and Connect to an API
+2. [Create Our Flask App](#goal-2-create-our-flask-app)
+3. [Freeze It](#goal-3-freeze-it)
+4. [Add Pages / Content with Markdown](#goal-4-add-pages--content-with-markdown)
+5. [Add Some JavaScript and Connect to an API](#add-some-javascript-and-connect-to-an-api)
 
 Then afterwards, I'll show you how to deploy with Netilify.
 
@@ -115,20 +115,20 @@ So go ahead and [install that](https://pipenv-fork.readthedocs.io/en/latest/inst
 
 Now that we have those installed, we're going to install our requirements:
 
-    ```bash
-    $ pipenv --python 3.7 install flask frozen-flask flask-flatpages
-    ```
+```bash
+$ pipenv --python 3.7 install flask frozen-flask flask-flatpages
+```
 
 Pipenv nicely creates a virtual environment for us, a `Pipfile`, and `Pipfile.Lock`, and installs our
 packages. We also tell it to use 3.7, because it is the default version for Netlify. Well that was easy.
 
 Now let's commit it, and move on:
 
-    ```bash
-    $ git add .
-    $ git commit -m 'project setup'
-    $ git push
-    ```
+```bash
+$ git add .
+$ git commit -m 'project setup'
+$ git push
+```
 
 ## Goal 2: Create Our Flask App
 
@@ -137,23 +137,23 @@ Pipenv.
 
 Let's make `app.py`:
 
-    ```python
-    from flask import Flask
+```python
+from flask import Flask
 
-    # Create our app object, use this page as our settings (will pick up DEBUG)
-    app = Flask(__name__)
+# Create our app object, use this page as our settings (will pick up DEBUG)
+app = Flask(__name__)
 
-    # For settings, we just use this file itself, very easy to configure
-    app.config.from_object(__name__)
+# For settings, we just use this file itself, very easy to configure
+app.config.from_object(__name__)
 
-    # We want Flask to allow no slashes after paths, because they get turned into flat files
-    app.url_map.strict_slashes = False
+# We want Flask to allow no slashes after paths, because they get turned into flat files
+app.url_map.strict_slashes = False
 
-    # Create a route to our index page at the root url, return a simple greeting
-    @app.route("/")
-    def index():
-        return "Hello, Flask"
-    ```
+# Create a route to our index page at the root url, return a simple greeting
+@app.route("/")
+def index():
+    return "Hello, Flask"
+```
 
 Basic Flask stuff. Of course, you can do anything here, even talk to a database, but you don't want
 to put anything in that would be based on user interaction or state. Everything should be responding
@@ -165,11 +165,11 @@ making any old Flask site. And really, we are.
 
 First setup our environment, then run it with pipenv.
 
-    ```bash
-    $ export FLASK_DEBUG=True
-    $ export FLASK_APP=app.py
-    $ pipenv run flask run
-    ```
+```bash
+$ export FLASK_DEBUG=True
+$ export FLASK_APP=app.py
+$ pipenv run flask run
+```
 
 We tell `pipenv` to `run flask` and `flask` to `run`. I know a bit confusing. Alternatively you can
 create a [pipenv script](https://pipenv-fork.readthedocs.io/en/latest/advanced.html#custom-script-shortcuts). But _[that's your bizzniss](https://twitter.com/iamtabithabrown)_.
@@ -186,21 +186,21 @@ Did you also know you can make a frozen Flask website in your computer? Even in 
 Earlier we installed [Frozen-Flask](https://pythonhosted.org/Frozen-Flask/). To get started,
 all we need is another file `freeze.py`:
 
-    ```python
-    from flask_frozen import Freezer
-    from app import app
+```python
+from flask_frozen import Freezer
+from app import app
 
-    freezer = Freezer(app)
+freezer = Freezer(app)
 
-    if __name__ == '__main__':
-        freezer.freeze()
-    ```
+if __name__ == '__main__':
+    freezer.freeze()
+```
 
 And then run it:
 
-    ```bash
-    $ pipenv run python freeze.py
-    ```
+```bash
+$ pipenv run python freeze.py
+```
 
 You'll see that it makes a directory `build` and the file `index.html`. Open it up and you'll see
 exactly what your browser gets when it goes to 'http://127.0.0.1:5000/' when our flask process is
@@ -229,36 +229,36 @@ and then deliver them as HTML.
 
 Let's update our `app.py`:
 
-    ```python
-    from flask import Flask, render_template
-    from flask_flatpages import FlatPages
+```python
+from flask import Flask, render_template
+from flask_flatpages import FlatPages
 
-    # Tell Flatpages to auto reload when a page is changed, and look for .md files
-    FLATPAGES_AUTO_RELOAD = True
-    FLATPAGES_EXTENSION = '.md'
+# Tell Flatpages to auto reload when a page is changed, and look for .md files
+FLATPAGES_AUTO_RELOAD = True
+FLATPAGES_EXTENSION = '.md'
 
-    # Create our app object, use this page as our settings (will pick up DEBUG)
-    app = Flask(__name__)
+# Create our app object, use this page as our settings (will pick up DEBUG)
+app = Flask(__name__)
 
-    # For settings, we just use this file itself, very easy to configure
-    app.config.from_object(__name__)
+# For settings, we just use this file itself, very easy to configure
+app.config.from_object(__name__)
 
-    # We want Flask to allow no slashes after paths, because they get turned into flat files
-    app.url_map.strict_slashes = False
+# We want Flask to allow no slashes after paths, because they get turned into flat files
+app.url_map.strict_slashes = False
 
-    # Create an instance of our extension
-    pages = FlatPages(app)
+# Create an instance of our extension
+pages = FlatPages(app)
 
-    # Route to FlatPages at our root, and route any path that ends in ".html"
-    @app.route("/")
-    @app.route("/<path:path>.html")
-    def page(path=None):
-        # Look for the page with FlatPages, or find "index" if we have no path
-        page = pages.get_or_404(path or 'index')
+# Route to FlatPages at our root, and route any path that ends in ".html"
+@app.route("/")
+@app.route("/<path:path>.html")
+def page(path=None):
+    # Look for the page with FlatPages, or find "index" if we have no path
+    page = pages.get_or_404(path or 'index')
 
-        # Render the template "page.html" with our page and title
-        return render_template("page.html", page=page, title=page.meta['title'])
-    ```
+    # Render the template "page.html" with our page and title
+    return render_template("page.html", page=page, title=page.meta['title'])
+```
 
 Note, that we could make other routes to do whatever we want, but currently we just have one that
 works with Flask-FlatPages.
@@ -278,12 +278,10 @@ has an '.md' extension will turn into a page, provided you also link to it with 
 At the top of each page, you'll notice it's "meta" section, which is yaml and looks something like
 this:
 
-    ```yaml
-    Title: Pet Shop Detective Agency
-    Description: We sniff out the clues.
-
-    ...
-    ```
+```yaml
+Title: Pet Shop Detective Agency
+Description: We sniff out the clues.
+```
 
 Within the pages, you might notice some HTML. Don't forget, markdown lets us embed HTML! Use it.
 
@@ -291,51 +289,51 @@ Within the pages, you might notice some HTML. Don't forget, markdown lets us emb
 
 Now let's create our Jinja template, that serves as the wrapper for our pages `templates/page.html`:
 
-    ```html+jinja
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="/static/base.css">
-      </head>
-      <body>
-        <header>
-          <a href="/" class="logo" aria-hidden="true"></a>
+```html+jinja
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/base.css">
+  </head>
+  <body>
+    <header>
+      <a href="/" class="logo" aria-hidden="true"></a>
 
-          <nav>
-            <a href="/" {% if page.path == "index" %}active{% endif %}>Home</a>
-            <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
-            <a href="{{ url_for('page', path='work') }}" {% if page.path == "work" %}active{% endif %}>Work</a>
-            <a href="{{ url_for('page', path='contact') }}" {% if page.path == "contact" %}active{% endif %}>Contact</a>
-          </nav>
-        </header>
+      <nav>
+        <a href="/" {% if page.path == "index" %}active{% endif %}>Home</a>
+        <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
+        <a href="{{ url_for('page', path='work') }}" {% if page.path == "work" %}active{% endif %}>Work</a>
+        <a href="{{ url_for('page', path='contact') }}" {% if page.path == "contact" %}active{% endif %}>Contact</a>
+      </nav>
+    </header>
 
-        <main>
-          {% block content %}
-              <h1>{{ page.meta.description }}</h1>
-              {{ page.html|safe }}
-          {% endblock content %}
-        </main>
-      </body>
-    </html>
-    ```
+    <main>
+      {% block content %}
+          <h1>{{ page.meta.description }}</h1>
+          {{ page.html|safe }}
+      {% endblock content %}
+    </main>
+  </body>
+</html>
+```
 
 Mostly we have a basic page here. There are a few things to note:
 
-    ```html+jinja
-    <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
-    ```
+```html+jinja
+<a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
+```
 
 We use flask's `url_for()` method to get the final url of our "team" page, also we have add an
 'active' attribute to the `<a>` tag when we are on that page, for styling purposes.
 
 Also in our content block, we do:
 
-    ```html+jinja
-    <h1>{{ page.meta.description }}</h1>
-    {{ page.html|safe }}
-    ```
+```html+jinja
+<h1>{{ page.meta.description }}</h1>
+{{ page.html|safe }}
+```
 
 We add an `h1` with the description from the page meta. And finally, we grab the `page.html` and run
 a `safe` filter on it because it includes HTML that we want to render unescaped.
@@ -357,9 +355,9 @@ Alright, alright. That was a lot. Let's check out how we did, make changes, etc.
 we simply use the flask server, and it will auto-reload. We can pretend it's just a normal flask
 site:
 
-    ```bash
-    $ pipenv run flask run
-    ```
+```bash
+$ pipenv run flask run
+```
 
 When we're done, we can test the freeze, it should put all our pages and assets into the build
 directory:
