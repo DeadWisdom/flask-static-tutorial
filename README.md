@@ -489,7 +489,9 @@ private and public endpoints. That helps you a lot when you get to caching.
 ## Communicate With Me!
 
 If you spot any problems, have any questions, or want to request further tutorials create an issue
-in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
+in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) 
+
+Or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
 
 Also I am available as a consultant, primarily in helping organizations streamline their innovation
 and development cycles, especially where product, design, and development need to communicate.
