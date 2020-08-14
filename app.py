@@ -25,4 +25,4 @@ def page(path=None):
     page = pages.get_or_404(path or 'index')
 
     # Render the template "page.html" with our page and title
-    return render_template("page.html", page=page, title=page.meta['title'])
+    return render_template("page.html", page=page, title=page.meta.get('title', ''))
