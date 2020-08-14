@@ -2,11 +2,11 @@ Embracing JAMStack with Python: Generating a Static Website with Flask and Deplo
 
 ### The Big Idea
 
-JAMStack completely changes how an entire organization can iterate on a web app. It decouples your
+JAMStack completely changes how individuals and entire organizations alike iterate on a web app. It decouples your
 frontend and backend workflow, so you can focus on speed to your end-user, worry less about how
 it's served, keep separate iteration cycles, and best of all, enable easy feature branching.
 
-I'll show, step by step, how can use the powerful, established tools of Flask and Python without
+I'll show, step by step, how you can use the powerful, sophisticated tools of Flask and Python without
 bothering with specialized static-site generators.
 
 ### Before We Begin
@@ -22,14 +22,14 @@ we must remember that our actions _matter_.
 
 And finally, if you struggle with this tutorial or the concepts herein, know that we all struggle.
 Tech is a deep, long journey, we all (at every level) get frustrated and doubt ourselves constantly.
-The ones that do best keep going, ignore the haters, and reach out to others for help.
+The best way is to keep going, ignore the haters, and reach out to others for help.
 
 ### Contents:
 
-- [JAMStack: What it is and why it's awesome.](#jamstack)
+- [JAMStack: What it is and why it's awesome](#jamstack)
 - [Generating Static Websites with Flask: A step-by-step tutorial](#generating-static-websites-with-flask)
 - [Netlify: What it is and how to deploy your site](#netlify)
-- [Final Thoughts: Some tips and where to go from here.](#final-thoughts)
+- [Final Thoughts: Some tips and where to go from here](#final-thoughts)
 
 ### Important Links:
 
@@ -44,42 +44,49 @@ JAMStack is a terrible name. It sounds like a local event for jarring preserves.
 concept: Focus on a separation of Javascript, API, and Markup.
 
 The frontend and the backend decouple, with the Markup becoming a _static_ platform which the
-JavaScript builds on. Data is delivered from the API to the JavaScript. You can still do some
-generating Markup on the server, but that is now an edge-case and is done through the API.
+JavaScript builds on. Dynamic data is delivered from the API to the client via JavaScript. You can
+still do some dynamic Markup generation on the server, but that is now an edge-case and is done
+through the API.
 
-Since our Markup (and JavaScript) is now static, it lends itself to serving directly from a \*[CDN]: Content Delivery Network, which ensures your site is delivered as fast as possible. This is
+Since our client assets are now all static, it lends itself to serving directly from a Content
+Delivery Network. This ensures your site is delivered as fast and efficiently as possible. This is
 where Netlify comes in. It makes deploying from your repository to a website super slick. And a real
-fire and forget sort of process. More on that later.
+fire and forget solution. More on that later.
 
-Now, keeping your frontend and backend decoupled is such an amazing thing once you set it up, that
-it's easily worth the price of admission. Backend often requires a lot of tests, analysis,
-optimization, and generally way longer iteration cycles than frontend, which often wants to make
-changes and iterate by the hour, and want to see results immediately, rather than waiting for a
-backend build that's often compiling a docker image, running tests, etc and can take a long time.
+![A diagram showing JAMStack elements. JavaScript and Markup are static. JavaScript enhances Markup. API is dynamic. API and JavaScript send data to each other.](https://flask-static-tutorial.netlify.app/static/jamstack.webp)
 
-Also testing feature branches in only your frontend, without needing to create a whole new backend
-environment is simply amazing, and revolutionizes the experience from the developer all the way to
-business stakeholders. Netlify gives you a unique URL _for every deploy_ meaning you can try out new
+Keeping your frontend and backend decoupled is an amazing thing once you set it up. It's easily
+worth the price of admission. Backend often requires a lot of tests, analysis, optimization, and
+generally way longer iteration cycles than frontend, which often wants to make changes and iterate
+by the minute with immediate results. When you are changing the border radius of a button, you'd rather
+not wait for a backend build that's often compiling a docker image, running tests, deploying, etc...
+
+Testing frontend feature branches, without needing to create a whole new backend environment is game
+changing. It revolutionizes everyone's experience, from the developer all the way to business
+stakeholders. Netlify gives you a unique URL _for every deploy_ meaning you can try out new
 features, review old deploys, and quickly test for production readiness.
 
 Lastly, keeping things decoupled also makes it easy to slot in serverless endpoints or backendless
-options like Firebase or AWS Amplify. Modularity, composition, wow! Who knew it was so great?
+options like Firebase or AWS Amplify.
 
-### When to not use JAMStack
+Modularity... Composition... Wow! Who knew it was so great?
 
-JAMStack only has one place where classic markup generation is better, and that's when you need
-to generate a lot of _content_, i.e. Markup, depending on the user viewing or based on dynamic data.
+### When not to use JAMStack
 
-With something like a stock-ticker, that's fine because it comes from an API. But for
+JAMStack has one place where classic markup generation is better, and that's when you need to
+generate a lot of _dynamic content_, i.e. Markup that changes depending on the user viewing or some
+other trip to the database.
+
+With something like a stock-ticker, that's still doable, because it comes from an API. But for
 something like a CMS, where the content often changes via a database, then classic Jinja rendering
 is still where it's at.
 
-Still a lot of the promises of database-driven CMS's have yet to materialize, and people are
+Still, a lot of the promises of database-driven CMSs have yet to materialize, and people are
 increasingly finding it easier to simply change the content in the source code and redeploy,
 especially when it's done automatically and quickly.
 
 Further it's simple to put some content generation behind an API endpoint, if you don't need a lot
-done that way.
+of that.
 
 # Generating Static Websites with Flask
 
@@ -95,7 +102,7 @@ We're going to break our endeavour into these goals:
 2. [Create Our Flask App](#goal-2-create-our-flask-app)
 3. [Freeze It](#goal-3-freeze-it)
 4. [Add Pages / Content with Markdown](#goal-4-add-pages--content-with-markdown)
-5. [Add Some JavaScript and Connect to an API](#add-some-javascript-and-connect-to-an-api)
+5. [Add JavaScript and Connect to an API](#add-some-javascript-and-connect-to-an-api)
 
 Then afterwards, I'll show you how to deploy with Netilify.
 
@@ -103,31 +110,30 @@ Now to it!
 
 ## Goal 1: Setup / Install our Dependencies and Setup Github
 
-First we will setup our Git repository. Using _Github_ here, which I'm not happy about because of their
-work with ICE, but it's by far the most used and accessible source repo to hook into Netlify, so we're
-balancing that requirement.
+First we will setup our Git repository. Using _Github_ here, cause it's a big old standard.
 
-Let's create [a new repository](https://github.com/new). I named it "flask-static-tutorial". I checked "Initialize this repository with a README", added a gitignore (Python), and a license (MIT). You do you.
+Let's create [a new repository](https://github.com/new). I named it "flask-static-tutorial". I
+checked "Initialize this repository with a README", added a gitignore (Python), and a license (MIT).
+You do you.
 
-Then, once it's made, clone the repository locally.
+Once it's made, clone the repository locally.
 
 I'm going to assume you have Python 3.6+ on your system.
-I like using [Pyenv](https://github.com/pyenv/pyenv).
-A great tutorial for which, [is available here](https://realpython.com/intro-to-pyenv/).
+I like using [Pyenv](https://github.com/pyenv/pyenv) which manages the installation and selection of
+multiple Python versions. A great tutorial [is available here](https://realpython.com/intro-to-pyenv/).
 
 We're also going to use [Pipenv](https://pipenv-fork.readthedocs.io/en/latest/) for this tutorial.
-It will manage our Python dependencies. Using it because it's pretty cool, but mostly because
-Netlify supports it directly.
+It will manage our Python dependencies. I'm using it mostly because Netlify supports `Pipfile` directly.
 So go ahead and [install that](https://pipenv-fork.readthedocs.io/en/latest/install.html#installing-pipenv).
 
-Now that we have those installed, we're going to install our requirements:
+Now that we have those installed, we'll install our requirements:
 
 ```bash
 $ pipenv --python 3.7 install flask frozen-flask flask-flatpages
 ```
 
 Pipenv nicely creates a virtual environment for us, a `Pipfile`, and `Pipfile.Lock`, and installs our
-packages. We also tell it to use 3.7, because it is the default version for Netlify. Well that was easy.
+packages. We also tell it to use 3.7, because it is the default version for Netlify.
 
 Now let's commit it, and move on:
 
@@ -139,7 +145,7 @@ $ git push
 
 ## Goal 2: Create Our Flask App
 
-This part is basically just following the flask tutorial. The only little hiccup is that we're using
+This part is basically just following the flask tutorial. The only little change is that we're using
 Pipenv.
 
 Let's make `app.py`:
@@ -163,14 +169,14 @@ def index():
 ```
 
 Basic Flask stuff. Of course, you can do anything here, even talk to a database, but you don't want
-to put anything in that would be based on user interaction or state. Everything should be responding
-to simple GET requests, not looking at `request` or anything. It's _static_ content after all.
+to add anything that is based on user interaction or state. Everything should respond
+to a simple GET request. Accessing the `request` global is a red-flag here. It's _static_ content after all.
 
 Now we run our server, and this is where using Flask is great, because we can develop our site as we
 go, without having to rebuild or run some command to do so after changes. We just pretend we are
 making any old Flask site. And really, we are.
 
-First setup our environment, then run it with pipenv.
+First setup our environment, then run it with Pipenv.
 
 ```bash
 $ export FLASK_DEBUG=True
@@ -178,12 +184,13 @@ $ export FLASK_APP=app.py
 $ pipenv run flask run
 ```
 
-We tell `pipenv` to `run flask` and `flask` to `run`. I know a bit confusing. Alternatively you can
-create a [pipenv script](https://pipenv-fork.readthedocs.io/en/latest/advanced.html#custom-script-shortcuts). But _[that's your bizzniss](https://twitter.com/iamtabithabrown)_.
+We tell `pipenv` to `run flask` and `flask` to `run`. Hope you follow. Alternatively you can
+create a [pipenv script](https://pipenv-fork.readthedocs.io/en/latest/advanced.html#custom-script-shortcuts).
+But _[that's your bizzniss](https://twitter.com/iamtabithabrown)_.
 
 Now we can open our browser to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) and be greeted.
 
-Good job! But don't get arrogant, we have more to do.
+Great work! But don't get arrogant, we have more to do.
 
 ## Goal 3: Freeze It
 
@@ -213,21 +220,21 @@ You'll see that it makes a directory `build` and the file `index.html`. Open it 
 exactly what your browser gets when it goes to 'http://127.0.0.1:5000/' when our flask process is
 running.
 
-Frozen-Flask is actually really simple. It just runs your app, goes to your root, copies the Markup,
-and saves it to a corresponding file. To find other pages, it tracks every response from `url_for()`
-and adds them to its queue.
+Frozen-Flask is really simple. It just runs your app, gets every root endpoint (ones without a path
+variable), copies the Markup, and saves it to a corresponding file. To find other pages, it tracks
+every response from `url_for()` and adds them to its queue.
 
-To find other pages that are outside of your root tree, [read more about how it finds urls here](https://pythonhosted.org/Frozen-Flask/#finding-urls).
+To find pages that are outside of your root tree, [read more about how it finds urls here](https://pythonhosted.org/Frozen-Flask/#finding-urls).
 
 We are really close. Now we just need, you know content.
 
 ## Goal 4: Add Pages / Content with Markdown
 
-Now you need to look into your cold, frozen heart to see what kind of website you want to make. For
-me, it's simple: A site for a pet detective agency. But you do you.
+It is time. Time for you to look into your cold, frozen heart to see what kind of website you want
+to make. For me, it's simple: A site for a pet detective agency. But you do you.
 
 One of the things 11ty, Jekyll and basically every ~~blog creation framework~~ static site generator
-does is easily let you create pages with markdown. So we're going to do the same.
+does is easily let you create pages with markdown. We're going to do the same.
 
 This is where Flask-FlatPages comes in. It lets us create pages in any format we want, process them,
 and then deliver them as HTML.
@@ -273,15 +280,16 @@ works with Flask-FlatPages.
 ### Markdown Pages
 
 We've got Flask-FlatPages looking for pages in a `pages` directory as default. So let's create some
-pages. You can click on each one, to copy them or make your own content. Any file you add here that
-has an '.md' extension will turn into a page, provided you also link to it with `url_for()`.
+pages. You can click on each one to copy them or make your own content. Any file you add here that
+has an '.md' extension will turn into a page, provided you also link to it in another page with
+`url_for()`.
 
     pages/
-      content.md
-      index.md
-      team.md
+      [content.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/contact.md)
+      [index.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/index.md)
+      [team.md](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/pages/team.md)
 
-At the top of each page, you'll notice it's "meta" section, which is yaml and looks something like
+At the top of each page, you'll notice its "meta" section, which is YAML and looks something like
 this:
 
 ```yaml
@@ -302,6 +310,7 @@ Now let's create our Jinja template, that serves as the wrapper for our pages `t
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <header>
@@ -351,8 +360,8 @@ but you might many more:
 
     static/
       images/
-        logo.png
-      base.css
+        [logo.png](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/images/logo.png)
+      [base.css](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/base.css)
 
 ### Develop & Freeze
 
@@ -376,40 +385,40 @@ directory:
       index.html
       team.html
 
-## Add Some JavaScript and Connect to an API
+## Goal 5: Add JavaScript and Connect to an API
 
-As a final step, we'll add some functionality to call an external API. Likely in a real world
-scenario, you'd create the API, and host it yourself, or use a serverless option.
-
-Alternatively, it's easy to use the very same repo, deploy it in a container somewhere, and now the API endpoints go there, whereas the Markup and JavaScript are served from Netlify.
-
-For this example, we're going to connect to an existing API,
-specifically [Dog CEO, Dog Api](https://dog.ceo/dog-api/).
+As a final step, we'll add some functionality to call an external API. In a real world
+scenario, you'd create the API, and host it yourself, or use a serverless option. Here we are just
+calling out to the wonderful service [Dog CEO, Dog Api](https://dog.ceo/dog-api/).
 
 We'll add the script linked below:
 
-    static/js/dogs.js
+    [static/js/dogs.js](https://github.com/DeadWisdom/flask-static-tutorial/blob/master/static/js/dogs.js)
 
-And link it in `templates/page.html` with a simple:
+It defines a custom element "dog-picture" which we've already spread through the site. If the user
+didn't have JavaScript, the browser just ignores all of the `<dog-picture>` elements. Once this
+script is loaded, they spring to life. Custom Elements. Neat.
 
-    <script type="module" src="/static/js/dogs.js"></script>
+We link it in `templates/page.html` with a simple:
+
+```html
+<script type="module" src="/static/js/dogs.js"></script>
+```
 
 When we freeze, you'll see, it gets added to `build/`. If we need to compile our JavaScript with
 rollup, parcel, or webpack it's simple enough to run that before we do freeze.
 
-And there we go, our site is ready to go. The last step is to deploy the thing...
+Only one more thing, let's deploy the thing...
 
 # Netlify
 
-Netlify isn't really doing anything special here. There's nothing that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated files.
+Netlify isn't really doing anything special here. There's nothing that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated chunk files.
 
 But using Netlify is a dream. They have really figured out the process. Basically, it hooks into your repo, listens for updates, then runs a build command, puts it on a CDN, and routes to it.
 
-Every build gets served by a _unique url_. This is key. It means we can create feature branches without
-a thought. Since they talk to the same APIs, we can only easily branch on the frontend, but that is usually
-a fine trade-off.
+Every build gets served by a _unique url_. This is key. It means we can create feature branches of our frontend without a thought.
 
-Oh and by the way, it's free for small projects.
+And, nicely, it's free for small projects like this.
 
 ## Create the Site
 
@@ -424,14 +433,18 @@ Note: Netlify's basic build environment will look at our `Pipfile` to determine 
 and requirements. Since it configures the base python environment we don't have to actually run it
 with pipenv.
 
-![Screenshot of the "Basic build settings" section of the Netlify New Site options](https://octodex.github.com/images/yaktocat.png)
+![Screenshot of the "Basic build settings" section of the Netlify New Site options](https://flask-static-tutorial.netlify.app/static/build-settings.webp)
 
 Now press deploy. You can watch the progress by clicking on the deploy item, it will give you a full output
 and status. If you get a big old "Deploy Failed", go into the deploy and scroll down in the page
 to see why.
 
+![Screenshot of the logs for a failed deploy.](https://flask-static-tutorial.netlify.app/static/failed-logs.webp)
+
 When it succeeds you will see "Published" at at the top of the 'Deploys' screen you'll see a link
 like "https://infallible-beaver-cf7576.netlify.app". Click on it to view it.
+
+![Screenshot of the deploy page for a successful deploy.](https://flask-static-tutorial.netlify.app/static/deploy-success.webp)
 
 As awesome as "infallible-beaver-cf7576" is, you can rename your site by going to
 Settings > Domain Management. You can also bring in a custom domain.
@@ -439,16 +452,20 @@ Settings > Domain Management. You can also bring in a custom domain.
 Now every time you commit, it will go live. You can also make it only publish a specific branch,
 setup triggers, etc. There's a million different options, so play around.
 
-One important thing to know about Netlify is it has a decent redirect feature, allowing you to remap
-a request like /api/\* to wherever you want, including an API endpoint.
+## Some Netlify Extras
 
-And there you have it, ready to browser.
+Netlify has a decent redirect feature, allowing you to remap a request like /api/\* to wherever you want, including a custom API endpoint. [Read about Redirects and Rewrites](https://docs.netlify.com/routing/redirects/).
+
+Our `contact.md` page has a form that doesn't go anywhere, but it has a `data-netlify="true"` tag, which is automatically processed by Netlify. It gather all submissions, and you can read them in the site admin. Also, you can set up notifications for them. [Read about Netlify Forms](https://docs.netlify.com/forms/setup/).
+
+Light authentication can be done pretty simply through [Netlify's Authentication System](https://docs.netlify.com/visitor-access/identity/).
 
 # Final Thoughts
 
 I hope I've shown how JAMStack can be an amazing way to develop, and how we don't need to leave all
-the glorious wealth we have from Python to get there. From here you can look into Zappa for
-serverless endpoints,
+the glorious wealth we have from Python to get there. From here you can look into [Zappa for
+serverless endpoints](https://github.com/Miserlou/Zappa), deploying containers to [AWS Fargate](https://aws.amazon.com/fargate/), or using good old [Google App Engine](https://cloud.google.com/appengine/), for your
+API needs. I still prefer the latter for setting up quick Python APIs.
 
 ## Some Tips
 
@@ -458,20 +475,19 @@ them.
 
 Progressive enhancement is still, after all these years, the goal. Think as close to Markup as
 possible, and then move outward as needed. So much of our time is spent implementing doomed features
-that are overly complex and JavaScript nightmares, when what the user really needs is just some web
-form. JAMStack can help us here, but it can also lead us to Single Page React App nightmares.
+that are overly complex and JavaScript nightmares. Meanwhile what the user really needs is just some
+web form. JAMStack can help us here, but it can also lead us to Single Page React App nightmares.
 
 A great way to organize your apps is authenticated vs unauthenticated. Think of Markup as always
 anonymous, and then JavaScript adds functionality when they login. And think of your APIs as
 private and public endpoints. That helps you a lot when you get to caching.
 
-## Communication
+## Communicate with Me!
 
 If you spot any problems, have any questions, or want to request further tutorials create an issue
 in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
 
 Also I am available as a consultant, primarily in helping organizations streamline their innovation
-and development cycles, especially where product, design, and development teams are struggling to
-communicate.
+and development cycles, especially where product, design, and development need to communicate.
 
 Thanks!

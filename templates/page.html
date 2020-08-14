@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="module" src="/static/js/dogs.js"></script>
   </head>
   <body>
@@ -22,5 +23,13 @@
           {{ page.html|safe }}
       {% endblock content %}
     </main>
+
+    <footer>
+      <p>This site was made as a tutorial on JAMStack, and generating static websites with <a href="https://flask.palletsprojects.com/">Flask</a> and <a href="https://netlify.com">Netlify</a>.</p>
+      <ul>
+        <li><a href="https://github.com/DeadWisdom/flask-static-tutorial" target="_blank">github.com/DeadWisdom/flask-static-tutorial</a>
+        <li><a href="https://twitter.com/deadwisdom" target="_blank">@deadwisdom</a>
+      </ul>
+    </footer>
   </body>
 </html>
