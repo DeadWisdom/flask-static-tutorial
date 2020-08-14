@@ -285,6 +285,8 @@ this:
     ...
     ```
 
+Within the pages, you might notice some HTML. Don't forget, markdown lets us embed HTML! Use it.
+
 ### Jinja Template
 
 Now let's create our Jinja template, that serves as the wrapper for our pages `templates/page.html`:
@@ -429,8 +431,44 @@ to see why.
 When it succeeds you will see "Published" at at the top of the 'Deploys' screen you'll see a link
 like "https://infallible-beaver-cf7576.netlify.app". Click on it to view it.
 
-You can also go into Settings > Domain Management and change it to a custom name or bring in a custom
-domain.
+As awesome as "infallible-beaver-cf7576" is, you can rename your site by going to
+Settings > Domain Management. You can also bring in a custom domain.
 
 Now every time you commit, it will go live. You can also make it only publish a specific branch,
 setup triggers, etc. There's a million different options, so play around.
+
+One important thing to know about Netlify is it has a decent redirect feature, allowing you to remap
+a request like /api/dogs to wherever you want, including an API server.
+
+And there you have it, dead simple.
+
+# Final Thoughts
+
+I hope I've shown how JAMStack can be an amazing way to develop, and how we don't need to leave all
+the glorious wealth we have from Python to get there.
+
+## Some Tips
+
+Do remember that the JavaScript part of JAMStack should be your last resort. Too much these days
+developers are pushing giant React bundles into clients, and our poor devices just can't handle
+them.
+
+Progressive enhancement is still, after all these years, the goal. Think as close to Markup as
+possible, and then move outward as needed. So much of our time is spent implementing doomed features
+that are overly complex and JavaScript nightmares, when what the user really needs is just some web
+form. JAMStack can help us here, but it can also lead us to Single Page React App nightmares.
+
+A great way to organize your apps is authenticated vs unauthenticated. Think of Markup as always
+anonymous, and then JavaScript adds functionality when they login. And think of your APIs as
+private and public endpoints. That helps you a lot when you get to caching.
+
+## Communication
+
+If you spot any problems, have any questions, or want to request further tutorials create an issue
+in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) or hit me up on twitter: [@htmlbrantley](https://twitter.com/htmlbrantley)
+
+Also I am available as a consultant, primarily in helping organizations streamline their innovation
+and development cycles, especially where product, design, and development teams are struggling to
+communicate.
+
+Thanks!
