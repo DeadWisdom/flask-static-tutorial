@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/base.css">
+  </head>
+  <body>
+    <header>
+      <a href="/" class="logo" aria-hidden="true"></a>
+
+      <nav>
+        <a href="/" {% if page.path == "index" %}active{% endif %}>Home</a>
+        <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
+        <a href="{{ url_for('page', path='work') }}" {% if page.path == "work" %}active{% endif %}>Work</a>
+        <a href="{{ url_for('page', path='contact') }}" {% if page.path == "contact" %}active{% endif %}>Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      {% block content %}
+          <h1>{{ page.meta.description }}</h1>
+          {{ page.html|safe }}
+      {% endblock content %}
+    </main>
+  </body>
+</html>

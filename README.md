@@ -116,11 +116,11 @@ So go ahead and [install that](https://pipenv-fork.readthedocs.io/en/latest/inst
 Now that we have those installed, we're going to install our requirements:
 
     ```bash
-    $ pipenv install flask frozen-flask flask-flatpages
+    $ pipenv --python 3.7 install flask frozen-flask flask-flatpages
     ```
 
 Pipenv nicely creates a virtual environment for us, a `Pipfile`, and `Pipfile.Lock`, and installs our
-packages. Well that was easy.
+packages. We also tell it to use 3.7, because it is the default version for Netlify. Well that was easy.
 
 Now let's commit it, and move on:
 
