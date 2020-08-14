@@ -349,7 +349,7 @@ Also in our content block, we do:
 {{ page.html|safe }}
 ```
 
-We add an `h1` with the description from the page meta. And finally, we grab the `page.html` and run
+We add an `<h1>` with the description from the page meta. And finally, we grab the `page.html` and run
 a `safe` filter on it because it includes HTML that we want to render unescaped.
 
 ### Static assets
@@ -458,7 +458,7 @@ Netlify has a decent redirect feature, allowing you to remap a request like /api
 
 Our `contact.md` page has a form that doesn't go anywhere, but it has a `data-netlify="true"` tag, which is automatically processed by Netlify. It gather all submissions, and you can read them in the site admin. Also, you can set up notifications for them. [Read about Netlify Forms](https://docs.netlify.com/forms/setup/).
 
-Light authentication can be done pretty simply through [Netlify's Authentication System](https://docs.netlify.com/visitor-access/identity/).
+Light authentication can be done pretty simply with [Netlify's Authentication System](https://docs.netlify.com/visitor-access/identity/).
 
 # Final Thoughts
 
