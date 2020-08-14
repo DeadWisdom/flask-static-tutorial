@@ -397,7 +397,7 @@ And there we go, our site is ready to go. The last step is to deploy the thing..
 
 # Netlify
 
-Netlify isn't really doing anything special here. There's nothing here that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated files.
+Netlify isn't really doing anything special here. There's nothing that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated files.
 
 But using Netlify is a dream. They have really figured out the process. Basically, it hooks into your repo, listens for updates, then runs a build command, puts it on a CDN, and routes to it.
 
@@ -407,7 +407,7 @@ a fine trade-off.
 
 Oh and by the way, it's free for small projects.
 
-## Step 1: Make an account & create our site
+## Create the Site
 
 First we make our account: [https://app.netlify.com/](https://app.netlify.com/)
 
@@ -422,4 +422,15 @@ with pipenv.
 
 ![Screenshot of the "Basic build settings" section of the Netlify New Site options](https://octodex.github.com/images/yaktocat.png)
 
-Now press deploy. If everything goes right, you're site will be built!
+Now press deploy. You can watch the progress by clicking on the deploy item, it will give you a full output
+and status. If you get a big old "Deploy Failed", go into the deploy and scroll down in the page
+to see why.
+
+When it succeeds you will see "Published" at at the top of the 'Deploys' screen you'll see a link
+like "https://infallible-beaver-cf7576.netlify.app". Click on it to view it.
+
+You can also go into Settings > Domain Management and change it to a custom name or bring in a custom
+domain.
+
+Now every time you commit, it will go live. You can also make it only publish a specific branch,
+setup triggers, etc. There's a million different options, so play around.
