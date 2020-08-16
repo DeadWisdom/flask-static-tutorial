@@ -18,10 +18,12 @@
     </header>
 
     <main>
+      <article>
       {% block content %}
           <h1>{{ page.meta.description }}</h1>
           {{ page.html|safe }}
       {% endblock content %}
+      </article>
     </main>
 
     <footer>

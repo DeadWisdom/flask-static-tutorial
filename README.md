@@ -316,9 +316,8 @@ Now let's create our Jinja template, that serves as the wrapper for our pages `t
   </head>
   <body>
     <header>
-      <a href="/" class="logo" aria-hidden="true"></a>
-
       <nav>
+        <a href="/" class="logo" aria-hidden="true"></a>
         <a href="/" {% if page.path == "index" %}active{% endif %}>Home</a>
         <a href="{{ url_for('page', path='team') }}" {% if page.path == "team" %}active{% endif %}>Team</a>
         <a href="{{ url_for('page', path='contact') }}" {% if page.path == "contact" %}active{% endif %}>Contact</a>
@@ -326,10 +325,12 @@ Now let's create our Jinja template, that serves as the wrapper for our pages `t
     </header>
 
     <main>
+      <article>
       {% block content %}
           <h1>{{ page.meta.description }}</h1>
           {{ page.html|safe }}
       {% endblock content %}
+      </article>
     </main>
   </body>
 </html>
