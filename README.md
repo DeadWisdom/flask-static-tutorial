@@ -106,6 +106,8 @@ Some benefits of using Flask instead of other static site generators:
 Now, we could easily use Django, FastAPI, Starlette, or any other framework for this,
 but Flask has two extensions that make the process really easy: Frozen-Flask and Flask-FlatPages.
 
+## Tutorial
+
 We're going to break our endeavour into these goals:
 
 1. [Setup / Install Our Dependencies and Setup Github](#goal-1-setup--install-our-dependencies-and-setup-github)
