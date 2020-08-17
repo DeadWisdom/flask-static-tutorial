@@ -93,7 +93,17 @@ of that.
 This technique allows you to generate a static website in much the same way you'd make a classic
 Flask app. And this example parallels examples shown by generators like 11ty, Gatsby, and Jekyll,
 but in my opinion is better because it allows us to use Python, Flask and all the great tools that
-come with. Now, we could easily use Django, FastAPI, Starlette, or any other framework for this,
+come with.
+
+Some benefits of using Flask instead of other static site generators:
+
+- During development, we just get to use a Flask server, there's no compile step.
+- No scaling problems when you get to lots of pages.
+- We can use the same tools and mindset we use to build standard servers and API servers.
+- No new domain-specific languages to do things like for-loops, and shoe-horn database querying into Markdown.
+- We can still integrate with any database Flask can, any remote api, and generally do anything Python can do, which is a lot.
+
+Now, we could easily use Django, FastAPI, Starlette, or any other framework for this,
 but Flask has two extensions that make the process really easy: Frozen-Flask and Flask-FlatPages.
 
 We're going to break our endeavour into these goals:
@@ -417,9 +427,13 @@ Only one more thing, let's deploy the thing...
 
 # Netlify
 
-Netlify isn't really doing anything special here. There's nothing that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated chunk files.
+Once we have the static content, we need somewhere to put it. Since it's all static, we can
+basically put it anywhere: behind nginx, on an S3, whatever. But it's best to put it behind a Content
+Delivery Network, where your data will live on multiple servers around the globe that are specially
+designed to cache and serve content quickly. The only trouble is managing that deployment process.
 
-But using Netlify is a dream. They have really figured out the process. Basically, it hooks into your repo, listens for updates, then runs a build command, puts it on a CDN, and routes to it.
+And that's why we use Netlify. They have really figured out the process. Basically, it hooks into
+your repo, listens for updates, then runs a build command, puts it on a CDN, and routes to it.
 
 Every build gets served by a _unique url_. This is key. It means we can create feature branches of our frontend without a thought.
 
@@ -472,6 +486,43 @@ the glorious wealth we have from Python to get there. From here you can look int
 serverless endpoints](https://github.com/Miserlou/Zappa), deploying containers to [AWS Fargate](https://aws.amazon.com/fargate/), or using good old [Google App Engine](https://cloud.google.com/appengine/), for your
 API needs. I still prefer the latter for setting up quick Python APIs.
 
+## Connecting a JavaScript Bundler
+
+The great part about this approach is we don't need a build step, but sometimes you need JavaScript
+to bundle, by running Rollup, Webpack, Parcel, etc. There are two places you need this. One is
+during development when you make a change, and the other is during your publish step.
+
+### Bundle For Publishing
+
+One is to change your Netlify build command to something like this:
+
+    $ npm run build && python freeze.py
+
+Have your package manager build right into your static folder like `/static/build`, and then have
+your Flask template pickup the JavaScript file there. Flask-Freeze will then move it to the `/build`
+directory for Netlify to use.
+
+### Bundle For Development
+
+I'll encourage you to use a resource like [open-wc.org](https://open-wc.org) or [Snowpack](https://www.snowpack.dev/) so that you _don't_ have to build anything for development. ES6 being what it is, you don't need to
+anymore.
+
+That said, sometimes we don't get to choose. In that case, we need to run our flask server and the
+bundler in watch mode.
+
+The simplest way is to just run two terminals:
+
+Terminal 1: \$ pipenv run flask run
+
+Terminal 2: \$ npm run webpack --watch
+
+### Bundle with Webpack
+
+If you're using Webpack, Andrew Montalenti ([@amontalenti](https://twitter.com/amontalenti)) wrote
+a bridge between Webpack and Flask that leans on Flask-Static, check it out at his gist:
+
+[https://gist.github.com/amontalenti/ffeca0dce10f29d42a82e80773804355](https://gist.github.com/amontalenti/ffeca0dce10f29d42a82e80773804355)
+
 ## Some Tips
 
 Do remember that the JavaScript part of JAMStack should be your last resort. Too much these days
@@ -487,14 +538,34 @@ A great way to organize your apps is authenticated vs unauthenticated. Think of 
 anonymous, and then JavaScript adds functionality when they login. And think of your APIs as
 private and public endpoints. That helps you a lot when you get to caching.
 
+## Alternatives to Netlify
+
+Netlify isn't really doing anything special here. There's nothing that necessitates it, and the adventurous might want to make their own deployment system. Static assets mean that you can put the hash in a filename and cache them indefinitely. Before Netlify I had a system that chunked my large JS bundles and placed them on S3 named by hash. When I made changes, clients only had to download the updated chunk files.
+
+You can also publish right to [GitHub Pages](https://pages.github.com/).
+
+Host it on an [NGinx](https://www.nginx.com/) server, and put [CloudFare](https://www.cloudflare.com/) in front of it.
+
+## Alternatives to Flask
+
+Django has [Django-Freeze](https://github.com/fabiocaccamo/django-freeze) to create static content in
+much the same way you'd do it here.
+
+[Pelican](https://blog.getpelican.com/) is a python based static site generator.
+
+Use [11ty](https://11ty.dev) if you want a full-featured specialized static generator written in
+Javascript.
+
 ## Communicate With Me!
 
 If you spot any problems, have any questions, or want to request further tutorials create an issue
-in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues) 
+in the project repo: [https://github.com/DeadWisdom/flask-static-tutorial/issues](https://github.com/DeadWisdom/flask-static-tutorial/issues)
 
 Or hit me up on twitter: [@deadwisdom](https://twitter.com/deadwisdom)
 
 Also I am available as a consultant, primarily in helping organizations streamline their innovation
 and development cycles, especially where product, design, and development need to communicate.
 
-Thanks!
+Thanks to those that helped me writing this, including [@matteasterday](https://twitter.com/matteasterday), [@DanielReesLewis](https://twitter.com/DanielReesLewis), and [@amontalenti](https://twitter.com/amontalenti).
+
+And thank you!
