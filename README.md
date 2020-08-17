@@ -14,6 +14,7 @@ bothering with specialized static-site generators.
 - [JAMStack: What it is and why it's awesome](#jamstack)
 - [Generating Static Websites with Flask: A step-by-step tutorial](#generating-static-websites-with-flask)
 - [Netlify: What it is and how to deploy your site](#netlify)
+- [Connecting a Bundler: Use with Rollup, Webpack, Parcel, etc](#connecting-a-bundler)
 - [Final Thoughts: Some tips and where to go from here](#final-thoughts)
 
 ### Important Links:
@@ -481,14 +482,7 @@ Our `contact.md` page has a form that doesn't go anywhere, but it has a `data-ne
 
 Light authentication can be done pretty simply with [Netlify's Authentication System](https://docs.netlify.com/visitor-access/identity/).
 
-# Final Thoughts
-
-I hope I've shown how JAMStack can be an amazing way to develop, and how we don't need to leave all
-the glorious wealth we have from Python to get there. From here you can look into [Zappa for
-serverless endpoints](https://github.com/Miserlou/Zappa), deploying containers to [AWS Fargate](https://aws.amazon.com/fargate/), or using good old [Google App Engine](https://cloud.google.com/appengine/), for your
-API needs. I still prefer the latter for setting up quick Python APIs.
-
-## Connecting a JavaScript Bundler
+# Connecting a Bundler
 
 The great part about this approach is we don't need a build step, but sometimes you need JavaScript
 to bundle, by running Rollup, Webpack, Parcel, etc. There are two places you need this. One is
@@ -498,7 +492,9 @@ during development when you make a change, and the other is during your publish 
 
 One is to change your Netlify build command to something like this:
 
-    $ npm run build && python freeze.py
+```bash
+$ npm run build && python freeze.py
+```
 
 Have your package manager build right into your static folder like `/static/build`, and then have
 your Flask template pickup the JavaScript file there. Flask-Freeze will then move it to the `/build`
@@ -514,9 +510,13 @@ bundler in watch mode.
 
 The simplest way is to just run two terminals:
 
-Terminal 1: \$ pipenv run flask run
+```bash
+    Terminal 1: $ pipenv run flask run
+```
 
-Terminal 2: \$ npm run webpack --watch
+```bash
+    Terminal 2: $ npm run webpack --watch
+```
 
 ### Bundle with Webpack
 
@@ -524,6 +524,13 @@ If you're using Webpack, Andrew Montalenti ([@amontalenti](https://twitter.com/a
 a bridge between Webpack and Flask that leans on Flask-Static, check it out at his gist:
 
 [https://gist.github.com/amontalenti/ffeca0dce10f29d42a82e80773804355](https://gist.github.com/amontalenti/ffeca0dce10f29d42a82e80773804355)
+
+# Final Thoughts
+
+I hope I've shown how JAMStack can be an amazing way to develop, and how we don't need to leave all
+the glorious wealth we have from Python to get there. From here you can look into [Zappa for
+serverless endpoints](https://github.com/Miserlou/Zappa), deploying containers to [AWS Fargate](https://aws.amazon.com/fargate/), or using good old [Google App Engine](https://cloud.google.com/appengine/), for your
+API needs. I still prefer the latter for setting up quick Python APIs.
 
 ## Some Tips
 
